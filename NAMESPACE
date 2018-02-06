@@ -1,0 +1,6 @@
+# NAMESPACE for package 'dumpJAGS'
+
+importFrom("stats", "optimize")
+
+export(hdi)
+
