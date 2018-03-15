@@ -1,6 +1,14 @@
 # NAMESPACE for package 'dumpJAGS'
 
-importFrom("stats", "optimize")
+importFrom("rjags", "jags.model", "adapt", "coda.samples", "load.module", "unload.module")
+importFrom("coda", "mcmc")
+importFrom("parallel", "detectCores", "makeCluster", "stopCluster", "clusterEvalQ",
+  "clusterExport", "parLapply")
+importFrom("stats", "update")
+importFrom("utils", "flush.console")
 
-export(hdi)
+export(dumpJAGS)
+export(combineDumps)
+export(simsList)
+export(recoverDumps)
 
