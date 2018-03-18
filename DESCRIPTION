@@ -1,11 +1,11 @@
 Package: dumpJAGS
 Type: Package
 Title: Run JAGS and regularly save output to files
-Version: 0.0.3
-Date: 2018-03-15
+Version: 0.0.3.9000
+Date: 2018-03-18
 Depends: rjags, coda
 Author: Mike Meredith
 Maintainer: Mike Meredith <mmeredith@wcs.org>
 Description: A wrapper for 'rjags' that allows samples to be saved to files periodically.
-License: GPL-3
+License: GPL (>=3)
 NeedsCompilation: no

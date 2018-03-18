@@ -53,6 +53,7 @@ dumpJAGS <- function(data, inits, params, modelFile,
     if(chains > coresToUse)
       warning(paste("Running", chains, "chains on", coresToUse, "cores."))
   }
+  # Check that path exists TODO
 
   # Deal with seeds and RNGs
   set.seed(seed, kind='default')

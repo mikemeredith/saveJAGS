@@ -16,6 +16,6 @@ combineDumps <- function(fileList) {
       end = attr(outsList[[length(this)]], "mcpar")[2],
       thin = attr(outsList[[1]], "mcpar")[3])
   }
-  return(as.mcmc.list(MC))
+  return(coda::as.mcmc.list(MC))
 }
 

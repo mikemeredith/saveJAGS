@@ -1,7 +1,7 @@
 # NAMESPACE for package 'dumpJAGS'
 
 importFrom("rjags", "jags.model", "adapt", "coda.samples", "load.module", "unload.module")
-importFrom("coda", "mcmc")
+importFrom("coda", "mcmc", "as.mcmc.list")
 importFrom("parallel", "detectCores", "makeCluster", "stopCluster", "clusterEvalQ",
   "clusterExport", "parLapply")
 importFrom("stats", "update")
