@@ -1,6 +1,11 @@
 
 # Reads files and combines the dumped output into an 'mcmc.list' object
 
+# TODO check that all vectors in fileList are same length.
+# TODO check that all files exist and are same size.
+# TODO check that thinning, chain length and parameter names match across files.
+# TODO implement thinning and parameter selection when files are read in.
+
 combineDumps <- function(fileList) {
   MC <- vector('list', length(fileList))
   for(i in 1:length(fileList)) {
