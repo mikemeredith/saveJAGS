@@ -1,3 +1,11 @@
+CHANGES in 0.0.3.9002 (devel)
+
+  * combineSaves gains params and thin arguments
+
+CHANGES in 0.0.3.9001 (devel)
+
+  * Changed name from 'dump...' to 'save...'
+
 CHANGES in 0.0.3.9000 (devel)
 
   * simsList can now deal with ragged arrays

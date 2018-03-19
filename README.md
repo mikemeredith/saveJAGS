@@ -8,7 +8,7 @@ This has the following advantages:
 
 * No need to exactly calculate the time needed for a run: make sure you ask for enough iterations, then abort when time's up.
 
-* Manage memory by loading only a subset of parameters saved or thinning before loading into R (functionality not yet implemented).
+* Manage memory by loading only a subset of parameters saved or thinning before loading into R.
 
 
 
