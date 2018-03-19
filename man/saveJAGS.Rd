@@ -1,15 +1,15 @@
-\name{dumpJAGS}
-\alias{dumpJAGS}
+\name{saveJAGS}
+\alias{saveJAGS}
 
 \title{
 Write MCMC samples to file
 }
 \description{
-Takes a list of data, initial values, a list of parameters to monitor, and the name of a text file containing the model, calls JAGS via \code{rjags}, and writes to output to a series of files.
+Takes a list of data, initial values, a list of parameters to monitor, and the name of a text file containing the model, calls JAGS via \code{rjags}, and writes the output to a series of files.
 }
 \usage{
-dumpJAGS(data, inits, params, modelFile,
-        chains=3, sample2dump=1000, nDumps=3, burnin=1000, thin=1, fileStub="dump",
+saveJAGS(data, inits, params, modelFile,
+        chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub="save",
         modules = c("glm"), parallel = NULL, seed=NULL)
 }
 \arguments{
@@ -28,11 +28,11 @@ the name of the file containing a description of the model.
   \item{chains}{
 the number of chains to run (maximum 26).
 }
-  \item{sample2dump}{
+  \item{sample2save}{
 the number of MCMC samples to include in each file after thinning.
 }
-  \item{nDumps}{
-the number of files to write per chain; the total iterations saved = sample2dump * nDumps * chains.
+  \item{nSaves}{
+the number of files to write per chain; the total iterations saved = sample2save * nSaves * chains.
 }
   \item{burnin}{
 the number of iterations to discard at the beginning of each chain; unlike other wrappers, adaptation continues until the end of the burn-in sequence.
@@ -41,7 +41,7 @@ the number of iterations to discard at the beginning of each chain; unlike other
 the thinning interval.
 }
   \item{fileStub}{
-a character value to use as the first part of the file name; it can include the path; to this is added a letter to identify the chain, a sequence number and date-time the block was started.
+a character value to use as the first part of the file name; it can include the path provided the target directory exists; to this is added a letter to identify the chain, a sequence number and date-time the block was started.
 }
   \item{modules}{
 the modules to load before calling JAGS.

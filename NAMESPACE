@@ -1,4 +1,4 @@
-# NAMESPACE for package 'dumpJAGS'
+# NAMESPACE for package 'saveJAGS', ne 'dumpJAGS'
 
 importFrom("rjags", "jags.model", "adapt", "coda.samples", "load.module", "unload.module")
 importFrom("coda", "mcmc", "as.mcmc.list")
@@ -7,8 +7,8 @@ importFrom("parallel", "detectCores", "makeCluster", "stopCluster", "clusterEval
 importFrom("stats", "update")
 importFrom("utils", "flush.console")
 
-export(dumpJAGS)
-export(combineDumps)
+export(saveJAGS)
+export(combineSaves)
 export(simsList)
-export(recoverDumps)
+export(recoverSaves)
 

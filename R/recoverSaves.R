@@ -1,7 +1,7 @@
 
-# Recover dump files created by 'dumpJAGS'
+# Recover saved files created by 'saveJAGS'
 
-recoverDumps <- function(fileStub) {
+recoverSaves <- function(fileStub) {
   raw <- sort(list.files(pattern=".RData$", recursive = TRUE))
   # Check filename stubs
   stubs <- sapply(strsplit(raw, "_"), function(x) x[1])

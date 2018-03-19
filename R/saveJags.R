@@ -10,8 +10,8 @@
 
 # This function is also called (with chains=1) to run JAGS in each worker.
 # Note that initList MUST be the first argument to work with parLapply.
-dumpJagsSerial <- function(initList, data, params, modelFile,
-    chains=1, sample2dump, nDumps, burnin=1000, thin=1, fileStub="dump") {
+saveJagsSerial <- function(initList, data, params, modelFile,
+    chains=1, sample2save, nSaves, burnin=1000, thin=1, fileStub="save") {
   
   chainID <- initList$chainID
   initList$chainID <- NULL # is necessary
@@ -19,11 +19,11 @@ dumpJagsSerial <- function(initList, data, params, modelFile,
   if(burnin > 0)
     update(jm, burnin)
   rjags::adapt(jm, n.iter=0, end.adaptation=TRUE)
-  fileNames <- character(nDumps)
-  for(i in 1:nDumps) {
+  fileNames <- character(nSaves)
+  for(i in 1:nSaves) {
     TS <- format(Sys.time(), "%y%m%d_%H%M.RData")
     fileNames[i] <- paste(fileStub, chainID, i, TS, sep="_")
-    out <- rjags::coda.samples(jm, params, n.iter=sample2dump * thin, thin=thin)
+    out <- rjags::coda.samples(jm, params, n.iter=sample2save * thin, thin=thin)
     save(out, file=fileNames[i])
   }
   return(fileNames)
@@ -32,8 +32,8 @@ dumpJagsSerial <- function(initList, data, params, modelFile,
 
 # The main function to run JAGS
 
-dumpJAGS <- function(data, inits, params, modelFile,
-        chains=3, sample2dump=1000, nDumps=3, burnin=1000, thin=1, fileStub="dump",
+saveJAGS <- function(data, inits, params, modelFile,
+        chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub="save",
         modules = c("glm"), parallel = NULL, seed=NULL)  {
         
   starttime  <- Sys.time()
@@ -82,15 +82,15 @@ dumpJAGS <- function(data, inits, params, modelFile,
       clusterExport(cl, c("modules", "loadJagsModules"), envir=environment())
       clusterEvalQ(cl, loadJagsModules(modules)) # No need to unload as we stopCluster
     }
-    fileList <- parLapply(cl, initList, dumpJagsSerial, data=data, params=params,
-      modelFile=modelFile, chains=1, sample2dump=sample2dump, nDumps=nDumps,
+    fileList <- parLapply(cl, initList, saveJagsSerial, data=data, params=params,
+      modelFile=modelFile, chains=1, sample2save=sample2save, nSaves=nSaves,
       burnin=burnin, thin=thin, fileStub=fileStub)
     message("done.")
   } else {     ##### Do the serial stuff #####
     if(!is.null(modules))
       loadJagsModules(modules)
-    fileList <- dumpJagsSerial(initList, data=data, params=params,
-      modelFile=modelFile, chains=chains, sample2dump=sample2dump, nDumps=nDumps,
+    fileList <- saveJagsSerial(initList, data=data, params=params,
+      modelFile=modelFile, chains=chains, sample2save=sample2save, nSaves=nSaves,
       burnin=burnin, thin=thin, fileStub=fileStub)
     if(!is.null(modules))
       unloadJagsModules(modules)

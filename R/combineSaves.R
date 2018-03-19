@@ -6,7 +6,7 @@
 # TODO check that thinning, chain length and parameter names match across files.
 # TODO implement thinning and parameter selection when files are read in.
 
-combineDumps <- function(fileList) {
+combineSaves <- function(fileList) {
   MC <- vector('list', length(fileList))
   for(i in 1:length(fileList)) {
     this <- fileList[[i]]

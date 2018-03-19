@@ -1,14 +1,14 @@
-\name{recoverDumps}
-\alias{recoverDumps}
+\name{recoverSaves}
+\alias{recoverSaves}
 
 \title{
-Recover files written by dumpJAGS
+Recover files written by saveJAGS
 }
 \description{
 Searches for files matching a file stub and the appropriate format and returns a list of file names.
 }
 \usage{
-recoverDumps(fileStub)
+recoverSaves(fileStub)
 }
 \arguments{
   \item{fileStub}{
