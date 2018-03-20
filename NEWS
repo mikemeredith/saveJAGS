@@ -1,11 +1,17 @@
+CHANGES in 0.0.3.9003 (devel)
+
+  * file lists produced by `saveJAGS` and `recoverSaves` have class `saveJAGSfileList`; there is a `summary` method for this; `as.matrix` and `as.mcmc.list` methods are planned.
+
+  * `saveJAGS` uses the Lecuyer random number generator.
+
 CHANGES in 0.0.3.9002 (devel)
 
-  * combineSaves gains params and thin arguments
+  * `combineSaves` gains `params` and `thin` arguments
 
 CHANGES in 0.0.3.9001 (devel)
 
-  * Changed name from 'dump...' to 'save...'
+  * Changed names from `dump...` to `save...`
 
 CHANGES in 0.0.3.9000 (devel)
 
-  * simsList can now deal with ragged arrays
+  * `simsList` can now deal with ragged arrays

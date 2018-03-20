@@ -22,5 +22,7 @@ recoverSaves <- function(fileStub) {
   n <- sapply(fileList, length)
   if(any(diff(n) != 0))
     warning("Chains have differing numbers of files.")
+
+  class(fileList) <- c("saveJAGSfileList", class(fileList))
   return(fileList)
 }

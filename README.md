@@ -1,4 +1,4 @@
-Run JAGS and regularly save output to files.
+###Run JAGS and regularly save output to files.
 
 This has the following advantages:
 
@@ -8,7 +8,7 @@ This has the following advantages:
 
 * No need to exactly calculate the time needed for a run: make sure you ask for enough iterations, then abort when time's up.
 
-* Manage memory by loading only a subset of parameters saved or thinning before loading into R.
+* Reduce memory needed in R (and never again get a "cannot allocate..." error after a long JAGS run): save as many iterations and parameters as you like to disc, then load only a subset of parameters or thin the chains before loading into R.
 
 
 

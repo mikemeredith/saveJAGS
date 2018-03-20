@@ -4,8 +4,6 @@
 
 # Purpose is to keep RAM requirements down and to keep output in case of power outages
 
-
-
 # Run JAGS in serial mode.
 
 # This function is also called (with chains=1) to run JAGS in each worker.
@@ -34,7 +32,7 @@ saveJagsSerial <- function(initList, data, params, modelFile,
 
 saveJAGS <- function(data, inits, params, modelFile,
         chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub="save",
-        modules = c("glm"), parallel = NULL, seed=NULL)  {
+        modules = "glm", parallel = NULL, seed=NULL)  {
         
   starttime  <- Sys.time()
   # Deal with parallelism:
@@ -55,12 +53,14 @@ saveJAGS <- function(data, inits, params, modelFile,
   }
   # Check that path exists TODO
 
-  # Deal with seeds and RNGs
-  set.seed(seed, kind='default')
-  chainSeeds <- sample.int(1e6, chains)
-  rng0 <- paste("base", c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper",
-    "Mersenne-Twister"), sep="::")
-  rng <- rep(rng0, length=chains)
+  # Deal with seeds and RNGs -- use 'lecuyer'
+  # set.seed(seed, kind='default')
+  # chainSeeds <- sample.int(1e6, chains)
+  # rng0 <- paste("base", c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper",
+    # "Mersenne-Twister"), sep="::")
+  # rng <- rep(rng0, length=chains)
+  load.module("lecuyer")
+  seeds <- parallel.seeds("lecuyer::RngStream", chains)
 
   # Fix inits
   if(is.function(inits))  {
@@ -69,8 +69,7 @@ saveJAGS <- function(data, inits, params, modelFile,
     initList <- inits
   } else stop("inits must be a function or a list of length = chains")
   for(i in 1:chains) {
-    initList[[i]]$.RNG.name <- rng[i]
-    initList[[i]]$.RNG.seed <- chainSeeds[i]
+    initList[[i]] <- c(initList[[i]], seeds[[i]])
     initList[[i]]$chainID <- LETTERS[i]
   }
 
@@ -78,9 +77,10 @@ saveJAGS <- function(data, inits, params, modelFile,
     message("Waiting for parallel processing to complete...", appendLF=FALSE) ; flush.console()
     cl <- makeCluster(coresToUse) ; on.exit(stopCluster(cl))
     clusterEvalQ(cl, library(rjags))
+    clusterEvalQ(cl, load.module("lecuyer"))
     if(!is.null(modules)) {
       clusterExport(cl, c("modules", "loadJagsModules"), envir=environment())
-      clusterEvalQ(cl, loadJagsModules(modules)) # No need to unload as we stopCluster
+      clusterEvalQ(cl, loadJagsModules(modules))
     }
     fileList <- parLapply(cl, initList, saveJagsSerial, data=data, params=params,
       modelFile=modelFile, chains=1, sample2save=sample2save, nSaves=nSaves,
@@ -96,6 +96,7 @@ saveJAGS <- function(data, inits, params, modelFile,
       unloadJagsModules(modules)
   }
   print(Sys.time() - starttime)
+  class(fileList) <- c("saveJAGSfileList", class(fileList))
   invisible(fileList)
 }
 

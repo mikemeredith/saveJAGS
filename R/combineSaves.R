@@ -9,18 +9,19 @@
 combineSaves <- function(fileList, params=NULL, thin=1) {
 
   # Open first file and check stuff
+  out <- NULL
   load(fileList[[1]][1])
-  stopifnot(exists("out"))
-  stopifnot(class(out) == "mcmc.list")
+  if(is.null("out") || class(out) != "mcmc.list")
+    stop("fileList is not a valid saveJAGS file list")
   stopifnot(length(out) == 1)
   niter <- nrow(out[[1]])  
-  nthin <- thin(out)
+  nthin <- coda::thin(out)
   parAll <- colnames(out[[1]])
   
   if(!is.null(params)) {
     base <- sapply(strsplit(parAll, "\\["), "[", 1)
     parNames <- unique(base)
-    stopifnot(!any(is.na(match(params, parNames))))
+    stopifnot(!any(is.na(match(params, parNames)))) # TOFIX give names
     wanted <- base %in% params
   }
   
@@ -42,7 +43,7 @@ combineSaves <- function(fileList, params=NULL, thin=1) {
     MC[[i]] <- coda::mcmc(combo <- do.call(rbind, outsList),
       start = attr(outsList[[1]], "mcpar")[1],
       end = attr(outsList[[length(this)]], "mcpar")[2],
-      thin = attr(outsList[[1]], "mcpar")[3])
+      thin = attr(outsList[[1]], "mcpar")[3]) # TOFIX does it change automatically if we do thinning here?
   }
   return(coda::as.mcmc.list(MC))
 }

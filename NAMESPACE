@@ -1,7 +1,7 @@
 # NAMESPACE for package 'saveJAGS', ne 'dumpJAGS'
 
-importFrom("rjags", "jags.model", "adapt", "coda.samples", "load.module", "unload.module")
-importFrom("coda", "mcmc", "as.mcmc.list")
+importFrom("rjags", "jags.model", "adapt", "coda.samples", "load.module", "unload.module", "parallel.seeds")
+importFrom("coda", "mcmc", "as.mcmc.list", "thin")
 importFrom("parallel", "detectCores", "makeCluster", "stopCluster", "clusterEvalQ",
   "clusterExport", "parLapply")
 importFrom("stats", "update", "window")
@@ -12,3 +12,4 @@ export(combineSaves)
 export(simsList)
 export(recoverSaves)
 
+S3method("summary", "saveJAGSfileList")

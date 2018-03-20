@@ -17,7 +17,7 @@ a character value to use as the first part of the file name; it can include the 
 }
 
 \value{
-A list of file names with one component per chain.
+An object of class 'saveJAGSfileList', a list of file names with one component per chain. There is a summary method for the class.
 }
 \author{
 Mike Meredith.

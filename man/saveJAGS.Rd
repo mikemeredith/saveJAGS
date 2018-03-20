@@ -6,11 +6,13 @@ Write MCMC samples to file
 }
 \description{
 Takes a list of data, initial values, a list of parameters to monitor, and the name of a text file containing the model, calls JAGS via \code{rjags}, and writes the output to a series of files.
+
+Note: Currently, this only works with parallel processing with one chain per core; other options may throw errors.
 }
 \usage{
 saveJAGS(data, inits, params, modelFile,
         chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub="save",
-        modules = c("glm"), parallel = NULL, seed=NULL)
+        modules = "glm", parallel = NULL, seed=NULL)
 }
 \arguments{
   \item{data}{
@@ -44,18 +46,19 @@ the thinning interval.
 a character value to use as the first part of the file name; it can include the path provided the target directory exists; to this is added a letter to identify the chain, a sequence number and date-time the block was started.
 }
   \item{modules}{
-the modules to load before calling JAGS.
+a character vector with names of the modules to load before calling JAGS.
 }
   \item{parallel}{
 if TRUE, the chains will be run in parallel. If NULL, parallel processing will be used if the number of cores available exceeds the number of chains.
 }
   \item{seed}{
-the seed to pass to JAGS for the random number generation.
+the seed to pass to JAGS for the random number generation; currently ignored, see
+\code{\link{parallel.seeds}}.
 }
 }
 
 \value{
-A list of file names with one component per chain.
+An object of class 'saveJAGSfileList', a list of file names with one component per chain. There is a summary method for the class.
 }
 \author{
 Mike Meredith. Based code used to run JAGS in the \code{wiqid} package.
