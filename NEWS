@@ -1,3 +1,5 @@
+CHANGES in 0.0.3.9004 (devel)
+
 CHANGES in 0.0.3.9003 (devel)
 
   * file lists produced by `saveJAGS` and `recoverSaves` have class `saveJAGSfileList`; there is a `summary` method for this; `as.matrix` and `as.mcmc.list` methods are planned.

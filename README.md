@@ -1,4 +1,4 @@
-###Run JAGS and regularly save output to files.
+# Run JAGS and regularly save output to files.
 
 This has the following advantages:
 
