@@ -4,7 +4,7 @@ importFrom("rjags", "jags.model", "adapt", "coda.samples", "load.module", "unloa
 importFrom("coda", "mcmc", "as.mcmc.list", "thin")
 importFrom("parallel", "detectCores", "makeCluster", "stopCluster", "clusterEvalQ",
   "clusterExport", "parLapply")
-importFrom("stats", "update", "window")
+importFrom("stats", "update", "window", "median")
 importFrom("utils", "flush.console")
 
 export(saveJAGS)
