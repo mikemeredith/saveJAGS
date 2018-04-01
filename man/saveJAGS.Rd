@@ -7,12 +7,12 @@ Write MCMC samples to file
 \description{
 Takes a list of data, initial values, a list of parameters to monitor, and the name of a text file containing the model, calls JAGS via \code{rjags}, and writes the output to a series of files.
 
-Note: Currently, this only works with parallel processing with one chain per core; other options may throw errors.
+Note: Currently, this only works with parallel processing with one chain per core.
 }
 \usage{
 saveJAGS(data, inits, params, modelFile,
         chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub="save",
-        modules = "glm", parallel = NULL, seed=NULL)
+        modules = "glm")
 }
 \arguments{
   \item{data}{
@@ -28,13 +28,13 @@ a character vector giving the names of variables to be monitored.
 the name of the file containing a description of the model.
 }
   \item{chains}{
-the number of chains to run (maximum 26).
+the number of chains to run; must not exceed the number of cores/threads available on the machine (maximum 26).
 }
   \item{sample2save}{
-the number of MCMC samples to include in each file after thinning.
+the number of MCMC samples to include in each file AFTER thinning.
 }
   \item{nSaves}{
-the number of files to write per chain; the total iterations saved = sample2save * nSaves * chains.
+the number of files to write per chain; the total iterations saved = sample2save * thin * nSaves * chains.
 }
   \item{burnin}{
 the number of iterations to discard at the beginning of each chain; unlike other wrappers, adaptation continues until the end of the burn-in sequence.
@@ -48,19 +48,12 @@ a character value to use as the first part of the file name; it can include the 
   \item{modules}{
 a character vector with names of the modules to load before calling JAGS.
 }
-  \item{parallel}{
-if TRUE, the chains will be run in parallel. If NULL, parallel processing will be used if the number of cores available exceeds the number of chains.
-}
-  \item{seed}{
-the seed to pass to JAGS for the random number generation; currently ignored, see
-\code{\link{parallel.seeds}}.
-}
 }
 
 \value{
 An object of class 'saveJAGSfileList', a list of file names with one component per chain. There is a summary method for the class.
 }
 \author{
-Mike Meredith. Based code used to run JAGS in the \code{wiqid} package.
+Mike Meredith. Based on code used to run JAGS in the \code{wiqid} package.
 }
 

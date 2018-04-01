@@ -18,11 +18,17 @@ recoverSaves <- function(fileStub) {
       break
     fileList[[i]] <- files[this]
   }
-  # Check all chains have same number of files
+  # Check for duplicate file IDs, eg >1 file with "_A_1_"
+  dups <- sum(grepl("_A_001_", fileList[[1]])) +
+            sum(grepl("_A_1_", fileList[[1]])) # LEGACY - remove later
+  if(dups > 1)
+    stop("There are ", dups, " files with ID '_A_001_' or '_A_1_'.")
+  # Check all chains have same number of files; trim off excess
   n <- sapply(fileList, length)
-  if(any(diff(n) != 0))
-    warning("Chains have differing numbers of files.")
-
+  if(any(n != min(n))) {
+    fileList <- lapply(fileList, `length<-`, min(n))
+    warning("Chains had differing numbers of files; extra files were ignored.")
+  }
   class(fileList) <- c("saveJAGSfileList", class(fileList))
   return(fileList)
 }

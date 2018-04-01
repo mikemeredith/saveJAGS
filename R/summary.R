@@ -41,12 +41,12 @@ summary.saveJAGSfileList <- function(object, ...) {
   nPars <- length(base)
   tb <- table(base)
   cat("Parameters included (with number of elements):\n")
-  cat("    ", paste0(names(tb), " (", tb, ")", collapse=", "), fill=TRUE)
+  cat("    ", paste0(names(tb), " (", tb, ")", collapse=", "), "\n")
   cat("Total elements monitored:", nPars, "\n")
   if(niter < 1e4) {
-    cat(sprintf("Total elements monitored: %i\n", nPars*nRows))
+    cat(sprintf("Total values saved: %i\n", nPars*nRows))
   } else {
-    cat(sprintf("Total elements monitored: %1.1e\n", nPars*nRows))
+    cat(sprintf("Total values saved: %1.1e\n", nPars*nRows))
   }
   cat("Expected object size:", round(nPars*nRows/131072, 2), "Mb\n")
 }
