@@ -2,10 +2,10 @@
 # Recover saved files created by 'saveJAGS'
 
 recoverSaves <- function(fileStub) {
-  raw <- sort(list.files(pattern=".RData$", recursive = TRUE))
+  raw <- sort(list.files(dirname(fileStub), pattern=".RData$", recursive = TRUE))
   # Check filename stubs
   stubs <- sapply(strsplit(raw, "_"), function(x) x[1])
-  files <- raw[stubs == fileStub]
+  files <- raw[stubs == basename(fileStub)]
   if(length(files) == 0)
     stop("No files found that match the stub: ", fileStub)
 
@@ -16,7 +16,7 @@ recoverSaves <- function(fileStub) {
     this <- grepl(chainNames[i], files)
     if(sum(this) == 0)
       break
-    fileList[[i]] <- files[this]
+    fileList[[i]] <- file.path(dirname(fileStub), files[this])
   }
   # Check for duplicate file IDs, eg >1 file with "_A_1_"
   dups <- sum(grepl("_A_001_", fileList[[1]])) +

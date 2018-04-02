@@ -22,4 +22,7 @@ An object of class 'saveJAGSfileList', a list of file names with one component p
 \author{
 Mike Meredith.
 }
+\examples{
+# See the examples for saveJAGS function
+}
 
