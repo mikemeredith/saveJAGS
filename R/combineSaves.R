@@ -32,8 +32,9 @@ combineSaves <- function(fileList, params=NULL, thin=1) {
     for(j in 1:length(this)) {
       out <- NULL  # in case the loaded file does not contain 'out'
       load(this[[j]])
+      # check that out is not null
       if(thin > 1)
-        out <- window(out, thin=thin)
+        out <- window(out, thin=thin * thin(out))
       if(!is.null(params)) {
         outsList[j] <- out[, wanted, drop=FALSE]
       } else {

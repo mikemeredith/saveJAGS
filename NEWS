@@ -1,4 +1,8 @@
-CHANGES in 0.0.3.9005 (2018-04-01)
+CHANGES in 0.0.3.9007 (2018-04-03)
+
+  * fixed bug in 'combineSaves'
+
+CHANGES in 0.0.3.9006 (2018-04-02)
 
   * 'recoverSaves' can now cope with '_' in path names.
 
