@@ -1,6 +1,12 @@
+CHANGES in 0.0.3.9008 (2018-04-06)
+
+  * more sanity checks and informative messages.
+
+  * note that workers continue to run in saveJAGS help file and on-screen message.
+
 CHANGES in 0.0.3.9007 (2018-04-03)
 
-  * fixed bug in 'combineSaves'
+  * fixed bug in 'combineSaves'.
 
 CHANGES in 0.0.3.9006 (2018-04-02)
 

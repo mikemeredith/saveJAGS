@@ -10,7 +10,7 @@
 # Note that initList MUST be the first argument to work with parLapply.
 saveJagsSerial <- function(initList, data, params, modelFile,
     chains=1, sample2save, nSaves, burnin=1000, thin=1, fileStub="save") {
-  
+
   chainID <- initList$chainID
   initList$chainID <- NULL # is necessary
   jm <- rjags::jags.model(modelFile, data, initList, n.chains=chains, n.adapt=0)
@@ -33,9 +33,9 @@ saveJagsSerial <- function(initList, data, params, modelFile,
 saveJAGS <- function(data, inits, params, modelFile,
         chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub="save",
         modules = "glm")  {
-        
+
   starttime  <- Sys.time()
-  
+
   # Round up fractions:
   chains <- ceiling(chains)
   sample2save <- ceiling(sample2save)
@@ -51,7 +51,13 @@ saveJAGS <- function(data, inits, params, modelFile,
   if(chains > nCores)
     stop("Cannot run", chains, "chains on", nCores, "cores/threads.")
 
-  # Check that path exists TODO
+  # Check that path exists and files do not exist
+  if(!dir.exists(dirname(fileStub)))
+    stop("Can't find the folder: ", dirname(fileStub))
+  firstFile <- paste0(basename(fileStub), "_A_001_")
+  raw <- list.files(dirname(fileStub), pattern=".RData$")
+  if(any(grepl(firstFile, raw)))
+    stop("Files with names '", fileStub, "' already exist.\n\tUse a different fileStub.")
 
   # Deal with seeds and RNGs -- use 'lecuyer'
   load.module("lecuyer")
@@ -76,13 +82,16 @@ saveJAGS <- function(data, inits, params, modelFile,
     clusterExport(cl, c("modules", "loadJagsModules"), envir=environment())
     clusterEvalQ(cl, loadJagsModules(modules))
   }
+  on.exit(message("Master process terminated; workers will continue to run!"),
+      add=TRUE)
   fileList <- parLapply(cl, initList, saveJagsSerial, data=data, params=params,
     modelFile=modelFile, chains=1, sample2save=sample2save, nSaves=nSaves,
     burnin=burnin, thin=thin, fileStub=fileStub)
   message("Processing done.")
-  
+
   print(Sys.time() - starttime)
   class(fileList) <- c("saveJAGSfileList", class(fileList))
+  stopCluster(cl) ; on.exit()
   invisible(fileList)
 }
 

@@ -49,7 +49,11 @@ a character value to use as the first part of the file name; it can include the 
 a character vector with names of the modules to load before calling JAGS.
 }
 }
+\details{
+After running \code{saveJAGS}, you can extract the saved values to create an \code{mcmc.list} object with \code{combineSaves}; see the examples. \code{recoverSaves} can be used to recreate the file list if \code{saveJAGS} terminates before completion.
 
+Note that pressing 'Esc' will interrupt the master process in the R Console, but \emph{will not stop the workers}, which will continue until the task is finished, even if you close R. To stop the workers, right-click on the task in Task Manager and select 'End task' (Windows) or highlight in Activity Monitor and press the 'Force Quit' button (Mac).
+}
 \value{
 An object of class 'saveJAGSfileList', a list of file names with one component per chain. There is a summary method for the class.
 }
@@ -77,15 +81,18 @@ JAGSdata <- list(y = sal, n = 5, nSites = length(sal))
 inits <- function(chain) list(z = rep(1, 39))
 wanted <- c("p", "psi")
 
+# Create a folder for the output:
+dir.create("mysaves")
+
 res1 <- saveJAGS(JAGSdata, inits, wanted, "JAGSmodel.txt",
         chains=2, sample2save=1000, nSaves=4, burnin=1000, thin=1,
-        fileStub="testing")
+        fileStub="mysaves/testing")
 str(res1)
 summary(res1)
 
 # If the saveJAGS run was terminated before completion,
 #   we can recover the file list with recoverSaves:
-res2 <- recoverSaves("testing")
+res2 <- recoverSaves("mysaves/testing")
 all.equal(res1, res2)
 
 # Load the results into R as an mcmc.list object
@@ -94,5 +101,8 @@ str(mcmc)
 #... or subset by parameters, or thin:
 mcmc2 <- combineSaves(res1, params="p", thin=4)
 str(mcmc2)
+
+# Clean up
+unlink("mySaves", recursive=TRUE)
 }
 
