@@ -22,7 +22,7 @@ saveJagsSerial <- function(initList, data, params, modelFile,
     TS <- format(Sys.time(), "%y%m%d_%H%M.RData")
     fileNames[i] <- paste(fileStub, chainID, sprintf("%03i",i), TS, sep="_")
     out <- rjags::coda.samples(jm, params, n.iter=sample2save * thin, thin=thin)
-    save(out, file=fileNames[i])
+    save(out, jm, file=fileNames[i])
   }
   return(fileNames)
 }
@@ -74,6 +74,7 @@ saveJAGS <- function(data, inits, params, modelFile,
     initList[[i]]$chainID <- LETTERS[i]
   }
 
+  starttime  <- Sys.time()
   message("Parallel processing now running; output will be written to files.") ; flush.console()
   cl <- makeCluster(chains) ; on.exit(stopCluster(cl))
   clusterEvalQ(cl, library(rjags))
@@ -82,8 +83,6 @@ saveJAGS <- function(data, inits, params, modelFile,
     clusterExport(cl, c("modules", "loadJagsModules"), envir=environment())
     clusterEvalQ(cl, loadJagsModules(modules))
   }
-  on.exit(message("Master process terminated; workers will continue to run!"),
-      add=TRUE)
   fileList <- parLapply(cl, initList, saveJagsSerial, data=data, params=params,
     modelFile=modelFile, chains=1, sample2save=sample2save, nSaves=nSaves,
     burnin=burnin, thin=thin, fileStub=fileStub)
@@ -91,7 +90,6 @@ saveJAGS <- function(data, inits, params, modelFile,
 
   print(Sys.time() - starttime)
   class(fileList) <- c("saveJAGSfileList", class(fileList))
-  stopCluster(cl) ; on.exit()
   invisible(fileList)
 }
 

@@ -1,8 +1,14 @@
+CHANGES in 0.0.3.9009 (2018-04-08)
+
+  * new helper function 'verifyFileList'
+
+  * 'recoverSaves' does much more checking.
+
 CHANGES in 0.0.3.9008 (2018-04-06)
 
   * more sanity checks and informative messages.
 
-  * note that workers continue to run in saveJAGS help file and on-screen message.
+  * note that workers continue to run in saveJAGS help file.
 
 CHANGES in 0.0.3.9007 (2018-04-03)
 

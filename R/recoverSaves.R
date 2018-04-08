@@ -1,7 +1,7 @@
 
 # Recover saved files created by 'saveJAGS'
 
-recoverSaves <- function(fileStub) {
+recoverSaves <- function(fileStub, force=FALSE) {
   if(!dir.exists(dirname(fileStub)))
     stop("Can't find the folder: ", dirname(fileStub))
   raw <- sort(list.files(dirname(fileStub), pattern=".RData$"))
@@ -11,26 +11,72 @@ recoverSaves <- function(fileStub) {
   if(length(files) == 0)
     stop("No files found that match the stub: ", fileStub)
 
-  chainNames <- paste0("_", LETTERS, "_")
+  # Get chain IDs
+  fnames <- basename(unlist(files))
+  t2 <- strsplit(fnames, "_")
+  n <- table(sapply(t2, function(x) x[2]))
+  chainIDs <- names(n)
 
+  # Create the file list
+  chainNames <- paste0("_", chainIDs, "_")
   fileList <- list()
   for(i in seq_along(chainNames)) {
     this <- grepl(chainNames[i], files)
-    if(sum(this) == 0)
-      break
     fileList[[i]] <- file.path(dirname(fileStub), files[this])
   }
-  # Check for duplicate file IDs, eg >1 file with "_A_001_"
-  dups <- sum(grepl("_A_001_", fileList[[1]])) +
-            sum(grepl("_A_1_", fileList[[1]])) # LEGACY - remove later
-  if(dups > 1)
-    stop("There are ", dups, " files with ID '_A_001_'.")
-  # Check all chains have same number of files; trim off excess
-  n <- sapply(fileList, length)
+  names(fileList) <- chainIDs
+
+  # Check all chains have same number of files
   if(any(n != min(n))) {
-    fileList <- lapply(fileList, `length<-`, min(n))
-    warning("Chains had differing numbers of files; extra files were ignored.")
+    cat("Chains have differing numbers of files:\n")
+    print(n)
+    if(!force) {
+      stop("Please remove extra files before proceeding.")
+    } else {
+      fileList <- lapply(fileList, `length<-`, min(n))
+      fnames <- basename(unlist(fileList))
+      t2 <- strsplit(fnames, "_")
+      n <- table(sapply(t2, function(x) x[2]))
+      cat("Extra files will not be included in the list.")
+    }
   }
+  
+  # Check for duplicate chain/save combinations
+  IDno <- sapply(t2, function(x) paste(x[2], x[3], sep='_'))
+  dups <- duplicated(IDno)
+  if(any(dups)) {
+    cat("The following duplicate IDs were found:\n")
+    print(IDno[dups])
+    if(!force)
+      stop("Please remove duplicate files before proceeding.")
+  }
+  
+  # Check for correct letter/number sequences
+  ok <- sort(outer(chainIDs, sprintf("%03i",1:min(n)), paste, sep="_"))
+  bad <- IDno != ok
+  if(any(bad)) {
+    cat("File numbers are not in sequence:\n")
+    try(print(data.frame(correct=ok, actual=IDno, check=ifelse(bad, "<--", ""))))
+    if(!force)
+      stop("Please check files before proceeding.")
+  }
+
+  
+  # Check file sizes
+  fileSize <- unlist(sapply(fileList, file.size))
+  if(any(fileSize == 0)) {
+    if(!force) {
+      stop("At least one file has size 0.")
+    } else {
+      cat("At least one file has size 0.\n")
+    }
+  }
+  diverg <- max(1 - min(fileSize)/median(fileSize),
+                  max(fileSize)/median(fileSize)-1) *100
+  if(diverg > 1)
+    cat("File sizes diverge from the median by", round(diverg, 1), "%\n")
+
+
   class(fileList) <- c("saveJAGSfileList", class(fileList))
   return(fileList)
 }

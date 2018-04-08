@@ -11,7 +11,7 @@ summary.saveJAGSfileList <- function(object, ...) {
   fileSize <- sapply(object, file.size)
   diverg <- max(1 - min(fileSize)/median(fileSize),
                   max(fileSize)/median(fileSize)-1) *100
-  if(diverg > 0.1)
+  if(diverg > 1)
     cat("File sizes diverge from the median by", round(diverg, 1), "%\n")
 
   # Open first file and check stuff
