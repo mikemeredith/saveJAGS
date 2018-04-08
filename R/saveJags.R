@@ -17,12 +17,15 @@ saveJagsSerial <- function(initList, data, params, modelFile,
   if(burnin > 0)
     update(jm, burnin)
   rjags::adapt(jm, n.iter=0, end.adaptation=TRUE)
+  
+  # Create JAGSsettings object
+  JAGSsettings <- list(modules=list.modules(), samplers=list.factories("sampler"))
   fileNames <- character(nSaves)
   for(i in 1:nSaves) {
     TS <- format(Sys.time(), "%y%m%d_%H%M.RData")
     fileNames[i] <- paste(fileStub, chainID, sprintf("%03i",i), TS, sep="_")
     out <- rjags::coda.samples(jm, params, n.iter=sample2save * thin, thin=thin)
-    save(out, jm, file=fileNames[i])
+    save(out, jm, JAGSsettings, file=fileNames[i])
   }
   return(fileNames)
 }
@@ -73,7 +76,8 @@ saveJAGS <- function(data, inits, params, modelFile,
     initList[[i]] <- c(initList[[i]], seeds[[i]])
     initList[[i]]$chainID <- LETTERS[i]
   }
-
+  names(initList) <- LETTERS[1:chains]
+  
   starttime  <- Sys.time()
   message("Parallel processing now running; output will be written to files.") ; flush.console()
   cl <- makeCluster(chains) ; on.exit(stopCluster(cl))

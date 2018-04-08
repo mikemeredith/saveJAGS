@@ -79,7 +79,7 @@ writeLines(modelText, con = "JAGSmodel.txt")
 
 JAGSdata <- list(y = sal, n = 5, nSites = length(sal))
 inits <- function(chain) list(z = rep(1, 39))
-wanted <- c("p", "psi")
+wanted <- c("p", "psi", "z")
 
 # Create a folder for the output:
 dir.create("mysaves")
@@ -98,8 +98,8 @@ all.equal(res1, res2)
 # Load the results into R as an mcmc.list object
 mcmc <- combineSaves(res1)
 str(mcmc)
-#... or subset by parameters, or thin:
-mcmc2 <- combineSaves(res1, params="p", thin=4)
+#... or subset by parameters (omit z), or thin:
+mcmc2 <- combineSaves(res1, params=c("p", "psi"), thin=4)
 str(mcmc2)
 
 # Clean up

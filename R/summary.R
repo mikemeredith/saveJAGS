@@ -48,6 +48,6 @@ summary.saveJAGSfileList <- function(object, ...) {
   } else {
     cat(sprintf("Total values saved: %1.1e\n", nPars*nRows))
   }
-  cat("Expected object size:", round(nPars*nRows/131072, 2), "Mb\n")
+  cat("Expected object size:", round(nPars*nRows/16384, 2), "Mb\n")
 }
 
