@@ -63,7 +63,7 @@ saveJAGS <- function(data, inits, params, modelFile,
     stop("Files with names '", fileStub, "' already exist.\n\tUse a different fileStub.")
 
   # Deal with seeds and RNGs -- use 'lecuyer'
-  load.module("lecuyer")
+  load.module("lecuyer", quiet=TRUE)
   seeds <- parallel.seeds("lecuyer::RngStream", chains)
 
   # Fix inits

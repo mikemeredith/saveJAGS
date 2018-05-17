@@ -37,7 +37,7 @@ recoverSaves <- function(fileStub, force=FALSE) {
       fnames <- basename(unlist(fileList))
       t2 <- strsplit(fnames, "_")
       n <- table(sapply(t2, function(x) x[2]))
-      cat("Extra files will not be included in the list.")
+      message("Extra files will not be included in the list.")
     }
   }
   
@@ -68,7 +68,7 @@ recoverSaves <- function(fileStub, force=FALSE) {
     if(!force) {
       stop("At least one file has size 0.")
     } else {
-      cat("At least one file has size 0.\n")
+      message("At least one file has size 0.\n")
     }
   }
   diverg <- max(1 - min(fileSize)/median(fileSize),

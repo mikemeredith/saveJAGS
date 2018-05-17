@@ -53,6 +53,13 @@ a character vector with names of the modules to load before calling JAGS.
 After running \code{saveJAGS}, you can extract the saved values to create an \code{mcmc.list} object with \code{combineSaves}; see the examples. \code{recoverSaves} can be used to recreate the file list if \code{saveJAGS} terminates before completion.
 
 Note that pressing 'Esc' will interrupt the master process in the R Console, but \emph{will not stop the workers}, which will continue until the task is finished, even if you close R. To stop the workers, right-click on the task in Task Manager and select 'End task' (Windows) or highlight in Activity Monitor and press the 'Force Quit' button (Mac).
+
+The files written are \code{*.RData} files, which are compressed binary files. Each file contains three objects:
+
+  \tabular{ll}{
+  \code{out} \tab an object of class \code{mcmc.list} with 1 MCMC chain.\cr
+  \code{jm} \tab the JAGS model; use \code{print(jm)} to see the model code, \code{jm$data()} to access the data. \cr
+  \code{JAGSsettings} \tab a list with details of the modules loaded and the status of samplers. }
 }
 \value{
 An object of class 'saveJAGSfileList', a list of file names with one component per chain. There is a summary method for the class.

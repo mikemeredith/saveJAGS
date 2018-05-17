@@ -3,6 +3,10 @@
 
 
 summary.saveJAGSfileList <- function(object, ...) {
+  # Check that files exist:
+  bad <- !file.exists(unlist(object))
+  if(any(bad))
+    stop("Cannot find the files listed.")
   # Check for consistency of files
   stopifnot(is.list(object))
   fileCount <- sapply(object, length)
@@ -49,5 +53,6 @@ summary.saveJAGSfileList <- function(object, ...) {
     cat(sprintf("Total values saved: %1.1e\n", nPars*nRows))
   }
   cat("Expected object size:", round(nPars*nRows/16384, 2), "Mb\n")
+  return(names(tb))
 }
 
