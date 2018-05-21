@@ -1,15 +1,19 @@
 TODO
   * maybe a salvageJAGS function, in case the set of saves is incomplete.
-  * maybe save a "_000_" file after completing the burn-in phase, could use this to resume
-      and would be a milestone in the saves folder.
+
+CHANGES in 0.0.3.9012 (2018-05-21)
+
+  * 'summary.saveJAGSfileList' shows median time taken to create a file.
+
+  * added functions 'getModel' and 'getData' to get information on the run.
 
 CHANGES in 0.0.3.9011 (2018-05-16)
 
-  * 'combineSaves' gains a 'cores' argument and allow parallel processing.
+  * 'combineSaves' gains a 'cores' argument and allows parallel processing.
 
-  * fixed bug in combineSaves when used after resumeJAGS
+  * fixed bug in 'combineSaves' when used after 'resumeJAGS'
 
-  * summary.saveJAGSfileList now returns a vector with the base names.
+  * 'summary.saveJAGSfileList' now returns a vector with the base names.
 
 CHANGES in 0.0.3.9010 (2018-04-08)
 

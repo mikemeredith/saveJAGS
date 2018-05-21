@@ -2,7 +2,7 @@
 
 This has the following advantages:
 
-* In the event of a power outage or other unforeseen system crash, you still have most of the results so far.
+* In the event of a power outage or other unforeseen system crash (eg, Windows 10 update), you still have most of the results so far.
 
 * You can get interim results without stopping the main process: start a new instance of R and read in the files generated so far. Abort the run if already good enough.
 
@@ -10,5 +10,5 @@ This has the following advantages:
 
 * Reduce memory needed in R (and never again get a "cannot allocate..." error after a long JAGS run): save as many iterations and parameters as you like to disk, then load only a subset of parameters or thin the chains before loading into R.
 
-
+For more information see [here](http://mikemeredith.net/blog/2018/Intro_saveJAGS.htm).
 

@@ -1,7 +1,6 @@
 
 # Provides a summary of fileList object
 
-
 summary.saveJAGSfileList <- function(object, ...) {
   # Check that files exist:
   bad <- !file.exists(unlist(object))
@@ -19,19 +18,28 @@ summary.saveJAGSfileList <- function(object, ...) {
     cat("File sizes diverge from the median by", round(diverg, 1), "%\n")
 
   # Open first file and check stuff
-  out <- NULL
-  load(object[[1]][1])
-  if(is.null("out") || class(out) != "mcmc.list")
+  loadEnv <- new.env(FALSE)  # Need to ring-fence the stuff loaded
+  chk <- load(object[[1]][1], envir=loadEnv)
+  if( !("out" %in% chk) || class(loadEnv$out) != "mcmc.list")
     stop("object is not a valid saveJAGS file list")
-  stopifnot(length(out) == 1)
+  stopifnot(length(loadEnv$out) == 1)
 
   nchains <- length(object)
   filesPerChain <- length(object[[1]])
   cat("File list with", nchains, "chains, each with",
       filesPerChain, "files.\n")
-  nthin <- thin(out)
-  cat("Chains already thinned by:", nthin, "\n")
-  niter <- nrow(out[[1]])
+  timing <- try(getRunTime(object), silent=TRUE)
+  if(!inherits(timing, "try-error")) {
+    medTime <- round(median(timing, na.rm=TRUE), 2)
+    if(as.numeric(medTime, units="secs") < 60) {
+      cat("Median run time per file less than 1 min.\n")
+    } else {
+      cat("Median run time per file", medTime, units(medTime), "\n")
+    }
+  }
+  nthin <- thin(loadEnv$out)
+  cat("\nChains already thinned by:", nthin, "\n")
+  niter <- nrow(loadEnv$out[[1]])
   nRows <- niter*filesPerChain*nchains # rows in final matrix/mcmc.list/sims.list
   if(niter < 1e4) {
     cat(sprintf("Iterations saved: %i per file, %i per chain, %i total.\n",
@@ -40,13 +48,13 @@ summary.saveJAGSfileList <- function(object, ...) {
     cat(sprintf("Iterations saved: %1.1e per file, %1.1e per chain, %1.1e total.\n",
       niter, niter*filesPerChain, nRows))
   }
-  parAll <- colnames(out[[1]])
+  parAll <- colnames(loadEnv$out[[1]])
   base <- sapply(strsplit(parAll, "\\["), "[", 1)
   nPars <- length(base)
   tb <- table(base)
   cat("Parameters included (with number of elements):\n")
   cat("    ", paste0(names(tb), " (", tb, ")", collapse=", "), "\n")
-  cat("Total elements monitored:", nPars, "\n")
+  cat("\nTotal elements monitored:", nPars, "\n")
   if(niter < 1e4) {
     cat(sprintf("Total values saved: %i\n", nPars*nRows))
   } else {

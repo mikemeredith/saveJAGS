@@ -14,5 +14,8 @@ export(resumeJAGS)
 export(recoverSaves)
 export(combineSaves)
 export(simsList)
+export(getJAGSmodel)
+export(getJAGSdata)
+export(getRunTime)
 
 S3method("summary", "saveJAGSfileList")
