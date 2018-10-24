@@ -1,5 +1,15 @@
 TODO
-  * maybe a salvageJAGS function, in case the set of saves is incomplete.
+  * maybe a salvageJAGS function, in case the set of saves is ragged, ie,
+  more saves for some chains than others;
+  maybe allow resumeJAGS to start even if the set is ragged.
+
+  * if the fileStub path doesn't exist, offer to create it.
+
+CHANGES in 0.0.3.9013 (2018-10-24)
+
+  * 'summary.saveJAGSfileList' reports if adaptation was adequate.
+
+  * 'combineSaves' gains a 'burnFiles' argument.
 
 CHANGES in 0.0.3.9012 (2018-05-21)
 

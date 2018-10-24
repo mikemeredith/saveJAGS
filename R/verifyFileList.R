@@ -3,19 +3,19 @@
 
 verifyFileList <- function(fileList) {
   if(!dir.exists(dirname(fileList[[1]][1])))
-    stop("Can't find the folder: ", dirname(fileList[[1]][1]))
+    stop("Can't find the folder: ", dirname(fileList[[1]][1]), call. = FALSE)
   if(!file.exists(fileList[[1]][1]))
-    stop("Can't find the first file: ", fileList[[1]][1])
-    
+    stop("Can't find the first file: ", fileList[[1]][1], call. = FALSE)
+
   # Open first file and check stuff
   loadEnv <- new.env(FALSE)  # Need to ring-fence the stuff loaded
   chk <- load(fileList[[1]][1], envir=loadEnv)
   if(!("out" %in% chk) || is.null(loadEnv$out) ||
           class(loadEnv$out) != "mcmc.list")
-    stop("fileList is not a valid saveJAGS file list")
+    stop("fileList is not a valid saveJAGS file list", call. = FALSE)
   if(length(loadEnv$out) != 1)
-    stop("Files should contain a single chain.")
-  
+    stop("Files should contain a single chain.", call. = FALSE)
+
   # Get items to return
   parAll <- colnames(loadEnv$out[[1]])
   base <- sapply(strsplit(parAll, "\\["), "[", 1)

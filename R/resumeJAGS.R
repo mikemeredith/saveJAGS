@@ -19,7 +19,7 @@ resumeJAGS <- function(fileStub, nSaves=3) {
     this <- fileList[[i]][last]
     chk <- load(this, envir=loadEnv)
     if( !("jm" %in% chk))
-      stop("File ", this, " does not have a valid JAGS model.")
+      stop("File ", this, " does not have a valid JAGS model.", call.=FALSE)
     resList[[i]] <- list(jm=loadEnv$jm, chainID=names(fileList)[i])
   }
   names(resList) <- names(fileList)
@@ -38,7 +38,7 @@ resumeJAGS <- function(fileStub, nSaves=3) {
   chains <- length(resList)
   nCores <- detectCores()
   if(chains > nCores)
-    stop("Cannot run", chains, "chains on", nCores, "cores/threads.")
+    stop("Cannot run", chains, "chains on", nCores, "cores/threads.", call.=FALSE)
 
   message("Parallel processing now running; output will be written to files.") ; flush.console()
   starttime  <- Sys.time()
@@ -78,7 +78,7 @@ resumeJAGS1 <- function(resList, params, sample2save, nSaves, startAt=1,
     if(done)
       break
   }
-  rjags::adapt(jm, n.iter=0, end.adaptation=TRUE)
+  adaptIsAdequate <- rjags::adapt(jm, n.iter=0, end.adaptation=TRUE)
 
   # Create JAGSsettings object
   JAGSsettings <- list(modules=list.modules(), samplers=list.factories("sampler"))
@@ -88,7 +88,7 @@ resumeJAGS1 <- function(resList, params, sample2save, nSaves, startAt=1,
     fileNames[i] <- paste(fileStub, resList$chainID, sprintf("%03i",i+startAt-1),
         TS, sep="_")
     out <- rjags::coda.samples(jm, params, n.iter=sample2save * thin, thin=thin)
-    save(out, jm, JAGSsettings, file=fileNames[i])
+    save(out, jm, JAGSsettings, adaptIsAdequate, file=fileNames[i])
   }
   return(fileNames)
 }

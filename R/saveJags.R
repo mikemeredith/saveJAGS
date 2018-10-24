@@ -16,7 +16,7 @@ saveJagsSerial <- function(initList, data, params, modelFile,
   jm <- rjags::jags.model(modelFile, data, initList, n.chains=chains, n.adapt=0)
   if(burnin > 0)
     update(jm, burnin)
-  rjags::adapt(jm, n.iter=0, end.adaptation=TRUE)
+  adaptIsAdequate <- rjags::adapt(jm, n.iter=0, end.adaptation=TRUE)
   
   # Create JAGSsettings object
   JAGSsettings <- list(modules=list.modules(), samplers=list.factories("sampler"))
@@ -25,7 +25,7 @@ saveJagsSerial <- function(initList, data, params, modelFile,
     TS <- format(Sys.time(), "%y%m%d_%H%M.RData")
     fileNames[i] <- paste(fileStub, chainID, sprintf("%03i",i), TS, sep="_")
     out <- rjags::coda.samples(jm, params, n.iter=sample2save * thin, thin=thin)
-    save(out, jm, JAGSsettings, file=fileNames[i])
+    save(out, jm, JAGSsettings, adaptIsAdequate, file=fileNames[i])
   }
   return(fileNames)
 }
@@ -48,19 +48,19 @@ saveJAGS <- function(data, inits, params, modelFile,
   # Deal with parallelism:
   nCores <- detectCores()
   if(nCores < 2)
-      stop("Multiple cores not available.")
+      stop("Multiple cores not available.", call.=FALSE)
   if(chains > 26)
-    stop("Currently limited to 26 chains.")
+    stop("Currently limited to 26 chains.", call.=FALSE)
   if(chains > nCores)
-    stop("Cannot run", chains, "chains on", nCores, "cores/threads.")
+    stop("Cannot run", chains, "chains on", nCores, "cores/threads.", call.=FALSE)
 
   # Check that path exists and files do not exist
   if(!dir.exists(dirname(fileStub)))
-    stop("Can't find the folder: ", dirname(fileStub))
+    stop("Can't find the folder: ", dirname(fileStub), call.=FALSE)
   firstFile <- paste0(basename(fileStub), "_A_001_")
   raw <- list.files(dirname(fileStub), pattern=".RData$")
   if(any(grepl(firstFile, raw)))
-    stop("Files with names '", fileStub, "' already exist.\n\tUse a different fileStub.")
+    stop("Files with names '", fileStub, "' already exist.\n\tUse a different fileStub.", call.=FALSE)
 
   # Deal with seeds and RNGs -- use 'lecuyer'
   load.module("lecuyer", quiet=TRUE)
@@ -78,7 +78,6 @@ saveJAGS <- function(data, inits, params, modelFile,
   }
   names(initList) <- LETTERS[1:chains]
   
-  starttime  <- Sys.time()
   message("Parallel processing now running; output will be written to files.") ; flush.console()
   cl <- makeCluster(chains) ; on.exit(stopCluster(cl))
   clusterEvalQ(cl, library(rjags))

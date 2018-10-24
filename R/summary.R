@@ -5,12 +5,12 @@ summary.saveJAGSfileList <- function(object, ...) {
   # Check that files exist:
   bad <- !file.exists(unlist(object))
   if(any(bad))
-    stop("Cannot find the files listed.")
+    stop("Cannot find the files listed.", call. = FALSE)
   # Check for consistency of files
   stopifnot(is.list(object))
   fileCount <- sapply(object, length)
   if(any(diff(fileCount) != 0))
-    stop("Chains do not have equal numbers of files.")
+    stop("Chains do not have equal numbers of files.", call. = FALSE)
   fileSize <- sapply(object, file.size)
   diverg <- max(1 - min(fileSize)/median(fileSize),
                   max(fileSize)/median(fileSize)-1) *100
@@ -21,7 +21,7 @@ summary.saveJAGSfileList <- function(object, ...) {
   loadEnv <- new.env(FALSE)  # Need to ring-fence the stuff loaded
   chk <- load(object[[1]][1], envir=loadEnv)
   if( !("out" %in% chk) || class(loadEnv$out) != "mcmc.list")
-    stop("object is not a valid saveJAGS file list")
+    stop("object is not a valid saveJAGS file list", call. = FALSE)
   stopifnot(length(loadEnv$out) == 1)
 
   nchains <- length(object)
@@ -35,6 +35,13 @@ summary.saveJAGSfileList <- function(object, ...) {
       cat("Median run time per file less than 1 min.\n")
     } else {
       cat("Median run time per file", medTime, units(medTime), "\n")
+    }
+  }
+  if(!is.null(loadEnv$adaptIsAdequate)) {
+    if(loadEnv$adaptIsAdequate) {
+      cat("Adaptation was adequate.\n")
+    } else {
+      cat("Adaptation was NOT adequate; increase the 'burnin'.\n")
     }
   }
   nthin <- thin(loadEnv$out)
@@ -51,9 +58,10 @@ summary.saveJAGSfileList <- function(object, ...) {
   parAll <- colnames(loadEnv$out[[1]])
   base <- sapply(strsplit(parAll, "\\["), "[", 1)
   nPars <- length(base)
-  tb <- table(base)
+  tb <- data.frame(elements=c(table(base)))
   cat("Parameters included (with number of elements):\n")
-  cat("    ", paste0(names(tb), " (", tb, ")", collapse=", "), "\n")
+  # cat("    ", paste0(names(tb), " (", tb, ")", collapse=", "), "\n")
+  print(tb)
   cat("\nTotal elements monitored:", nPars, "\n")
   if(niter < 1e4) {
     cat(sprintf("Total values saved: %i\n", nPars*nRows))
@@ -61,6 +69,6 @@ summary.saveJAGSfileList <- function(object, ...) {
     cat(sprintf("Total values saved: %1.1e\n", nPars*nRows))
   }
   cat("Expected object size:", round(nPars*nRows/16384, 2), "Mb\n")
-  return(names(tb))
+  invisible(tb)
 }
 
