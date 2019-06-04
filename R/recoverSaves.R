@@ -14,8 +14,27 @@ recoverSaves <- function(fileStub, force=FALSE) {
   # Get chain IDs
   fnames <- basename(unlist(files))
   t2 <- strsplit(fnames, "_")
+  # Get chain IDs
   n <- table(sapply(t2, function(x) x[2]))
   chainIDs <- names(n)
+  # Check for startup errors
+  tochk <- which(sapply(t2, function(x) x[3]) == "startupError.RData")
+  if(length(tochk) > 0) {
+    loadEnv <- new.env(FALSE)
+    for(i in tochk) {
+      chk <- load(file.path(dirname(fileStub), fnames[i]), envir=loadEnv)
+      if(chk[1] == "JAGSerrorMessage") {
+        message("Chain ", chainIDs[i], " threw an error on start-up:")
+        cat(loadEnv$JAGSerrorMessage)
+      }
+    }
+    rm(loadEnv)
+    fnames <- fnames[-tochk]
+    # Redo this with bad files removed;
+    t2 <- strsplit(fnames, "_")
+    n <- table(sapply(t2, function(x) x[2]))
+    chainIDs <- names(n)
+  }
 
   # Create the file list
   chainNames <- paste0("_", chainIDs, "_")
@@ -25,6 +44,11 @@ recoverSaves <- function(fileStub, force=FALSE) {
     fileList[[i]] <- file.path(dirname(fileStub), files[this])
   }
   names(fileList) <- chainIDs
+
+  # Check for startup errors
+  # if(any(n==1)) {
+
+  # }
 
   # Check all chains have same number of files
   if(any(n != min(n))) {
@@ -40,7 +64,7 @@ recoverSaves <- function(fileStub, force=FALSE) {
       message("Extra files will not be included in the list.")
     }
   }
-  
+
   # Check for duplicate chain/save combinations
   IDno <- sapply(t2, function(x) paste(x[2], x[3], sep='_'))
   dups <- duplicated(IDno)
@@ -50,7 +74,7 @@ recoverSaves <- function(fileStub, force=FALSE) {
     if(!force)
       stop("Please remove duplicate files before proceeding.")
   }
-  
+
   # Check for correct letter/number sequences
   ok <- sort(outer(chainIDs, sprintf("%03i",1:min(n)), paste, sep="_"))
   bad <- IDno != ok
@@ -61,7 +85,7 @@ recoverSaves <- function(fileStub, force=FALSE) {
       stop("Please check files before proceeding.")
   }
 
-  
+
   # Check file sizes
   fileSize <- unlist(sapply(fileList, file.size))
   if(any(fileSize == 0)) {

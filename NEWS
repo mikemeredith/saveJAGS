@@ -3,7 +3,12 @@ TODO
   more saves for some chains than others;
   maybe allow resumeJAGS to start even if the set is ragged.
 
-  * if the fileStub path doesn't exist, offer to create it.
+CHANGES in 0.0.3.9014 (2019-06-01)
+
+  * Improved reporting of JAGS errors.
+  _not fully tested_, need JAGS to throw errors for that.
+
+  * Default for 'fileStub' removed, user must specify path.
 
 CHANGES in 0.0.3.9013 (2018-10-24)
 

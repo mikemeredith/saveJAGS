@@ -11,7 +11,7 @@ Note: Currently, this only works with parallel processing with one chain per cor
 }
 \usage{
 saveJAGS(data, inits, params, modelFile,
-        chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub="save",
+        chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub,
         modules = "glm")
 }
 \arguments{
