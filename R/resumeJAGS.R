@@ -20,7 +20,7 @@ resumeJAGS <- function(fileStub, nSaves=3) {
     chk <- load(this, envir=loadEnv)
     if( !("jm" %in% chk))
       stop("File ", this, " does not have a valid JAGS model.", call.=FALSE)
-    resList[[i]] <- list(jm=loadEnv$jm, chainID=names(fileList)[i])
+    resList[[i]] <- list(jm=loadEnv$jm, chainID=names(fileList)[i])  ############
   }
   names(resList) <- names(fileList)
 

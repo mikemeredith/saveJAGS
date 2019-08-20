@@ -12,7 +12,7 @@ Note: Currently, this only works with parallel processing with one chain per cor
 \usage{
 saveJAGS(data, inits, params, modelFile,
         chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub,
-        modules = "glm")
+        modules = "glm", firstChainID="AA")
 }
 \arguments{
   \item{data}{
@@ -47,6 +47,9 @@ a character value to use as the first part of the file name; it can include the 
 }
   \item{modules}{
 a character vector with names of the modules to load before calling JAGS.
+}
+  \item{firstChainID}{
+the ID for the first chain to be saved; must be doubled upper-case letters: AA, AB, AC, ..., ZZ.
 }
 }
 \details{

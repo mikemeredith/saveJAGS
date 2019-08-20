@@ -11,7 +11,7 @@ recoverSaves <- function(fileStub, force=FALSE) {
   if(length(files) == 0)
     stop("No files found that match the stub: ", fileStub)
 
-  # Get chain IDs
+  # Get chain IDs ###################################
   fnames <- basename(unlist(files))
   t2 <- strsplit(fnames, "_")
   # Get chain IDs
@@ -37,13 +37,13 @@ recoverSaves <- function(fileStub, force=FALSE) {
   }
 
   # Create the file list
-  chainNames <- paste0("_", chainIDs, "_")
+  chainNames <- paste0("_", chainIDs, "_")   #####################
   fileList <- list()
   for(i in seq_along(chainNames)) {
     this <- grepl(chainNames[i], files)
     fileList[[i]] <- file.path(dirname(fileStub), files[this])
   }
-  names(fileList) <- chainIDs
+  names(fileList) <- chainIDs  #############################
 
   # Check for startup errors
   # if(any(n==1)) {
@@ -75,7 +75,7 @@ recoverSaves <- function(fileStub, force=FALSE) {
       stop("Please remove duplicate files before proceeding.")
   }
 
-  # Check for correct letter/number sequences
+  # Check for correct number sequences for each chain (chains need not be in sequence)
   ok <- sort(outer(chainIDs, sprintf("%03i",1:min(n)), paste, sep="_"))
   bad <- IDno != ok
   if(any(bad)) {

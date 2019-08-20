@@ -3,6 +3,10 @@ TODO
   more saves for some chains than others;
   maybe allow resumeJAGS to start even if the set is ragged.
 
+CHANGES in 0.0.3.9015 (2019-08-20)
+
+  * Chain identifiers changed to 2-letter combinations, AA to ZZ; limit of 26 chains raised to 26^2 = 676 (wish of Wyatt Petersen).
+
 CHANGES in 0.0.3.9014 (2019-06-01)
 
   * Improved reporting of JAGS errors.
