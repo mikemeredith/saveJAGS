@@ -6,9 +6,8 @@ importFrom("rjags", "jags.model", "adapt", "coda.samples",
 importFrom("coda", "mcmc", "as.mcmc.list", "thin")
 importFrom("parallel", "detectCores", "makeCluster", "stopCluster", "clusterEvalQ",
   "clusterExport", "parLapply")
-importFrom("stats", "update", "window", "median", "sd")
+importFrom("stats", "update", "window", "median")
 importFrom("utils", "flush.console")
-importFrom("HDInterval", "hdi")
 
 export(saveJAGS)
 export(resumeJAGS)
@@ -20,13 +19,3 @@ export(getJAGSdata)
 export(getRunTime)
 
 S3method("summary", "saveJAGSfileList")
-
-export("mcmcArray")
-S3method("mcmcArray", "default")
-S3method("mcmcArray", "mcmc.list")
-S3method("mcmcArray", "jagsUI")
-
-S3method("$", "mcmcArray")
-S3method("[", "mcmcArray")
-S3method("print", "mcmcArray")
-S3method("summary", "mcmcArray")
