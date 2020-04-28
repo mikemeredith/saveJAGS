@@ -17,12 +17,12 @@ verifyFileList <- function(fileList) {
     stop("Files should contain a single chain.", call. = FALSE)
 
   # Get items to return
-  parAll <- colnames(loadEnv$out[[1]])
-  base <- sapply(strsplit(parAll, "\\["), "[", 1)
+  nodes <- colnames(loadEnv$out[[1]])
+  base <- sapply(strsplit(nodes, "\\["), "[", 1)
   out <- list(
     niter = nrow(loadEnv$out[[1]]),
     nthin = coda::thin(loadEnv$out),
-    parAll = parAll,
+    nodes = nodes,
     base = base,
     parNames = unique(base) )
   return(out)

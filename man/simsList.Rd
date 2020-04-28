@@ -2,10 +2,12 @@
 \alias{simsList}
 
 \title{
-Convert MCMC samples to a list of simulations
+Convert MCMC samples to a list of simulations (deprecated)
 }
 \description{
 Takes an object of class \code{mcmc.list} and converts it to a list with one component for each parameter present. Parameters which are not scalar are stored as arrays of the appropriate dimension. Ragged arrays in the JAGS output result in all-NA columns in the output - see Examples.
+
+We now recommend the use of \code{\link{mcmcOutput}} objects instead of \code{simsList}. This function will be removed in future versions.
 }
 \usage{
 simsList(mc)

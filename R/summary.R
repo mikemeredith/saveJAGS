@@ -15,7 +15,7 @@ summary.saveJAGSfileList <- function(object, ...) {
   diverg <- max(1 - min(fileSize)/median(fileSize),
                   max(fileSize)/median(fileSize)-1) *100
   if(diverg > 1)
-    cat("File sizes diverge from the median by", round(diverg, 1), "%\n")
+    cat(paste0("File sizes diverge from the median by ", round(diverg, 1), "%\n"))
 
   # Open first file and check stuff
   loadEnv <- new.env(FALSE)  # Need to ring-fence the stuff loaded
@@ -49,26 +49,26 @@ summary.saveJAGSfileList <- function(object, ...) {
   niter <- nrow(loadEnv$out[[1]])
   nRows <- niter*filesPerChain*nchains # rows in final matrix/mcmc.list/sims.list
   if(niter < 1e4) {
-    cat(sprintf("Iterations saved: %i per file, %i per chain, %i total.\n",
+    cat(sprintf("Draws saved: %i per file, %i per chain, %i total.\n",
       niter, niter*filesPerChain, nRows))
   } else {
-    cat(sprintf("Iterations saved: %1.1e per file, %1.1e per chain, %1.1e total.\n",
+    cat(sprintf("Draws saved: %1.1e per file, %1.1e per chain, %1.1e total.\n",
       niter, niter*filesPerChain, nRows))
   }
   parAll <- colnames(loadEnv$out[[1]])
   base <- sapply(strsplit(parAll, "\\["), "[", 1)
-  nPars <- length(base)
-  tb <- data.frame(elements=c(table(base)))
-  cat("Parameters included (with number of elements):\n")
+  nNodes <- length(base)
+  tb <- data.frame(nodes=c(table(base)))
+  cat("Parameters included (with number of nodes):\n")
   # cat("    ", paste0(names(tb), " (", tb, ")", collapse=", "), "\n")
   print(tb)
-  cat("\nTotal elements monitored:", nPars, "\n")
+  cat("\nTotal nodes monitored:", nNodes, "\n")
   if(niter < 1e4) {
-    cat(sprintf("Total values saved: %i\n", nPars*nRows))
+    cat(sprintf("Total values saved: %i\n", nNodes*nRows))
   } else {
-    cat(sprintf("Total values saved: %1.1e\n", nPars*nRows))
+    cat(sprintf("Total values saved: %1.1e\n", nNodes*nRows))
   }
-  cat("Expected object size:", round(nPars*nRows/16384, 2), "Mb\n")
+  cat("Expected object size:", round(nNodes*nRows*.Machine$sizeof.longdouble/1e6, 2), "Mb\n")
   invisible(tb)
 }
 

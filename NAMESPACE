@@ -1,5 +1,6 @@
 # NAMESPACE for package 'saveJAGS', ne 'dumpJAGS'
 
+importFrom("mcmcOutput", "mcmcOutput")
 importFrom("rjags", "jags.model", "adapt", "coda.samples",
   "load.module", "unload.module", "parallel.seeds",
   "list.factories",  "list.modules")
@@ -19,3 +20,5 @@ export(getJAGSdata)
 export(getRunTime)
 
 S3method("summary", "saveJAGSfileList")
+S3method("mcmcOutput", "saveJAGSfileList")
+S3method("as.mcmc.list", "saveJAGSfileList")

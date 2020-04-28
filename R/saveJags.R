@@ -15,9 +15,8 @@
 
 # This will ONLY run in parallel and will ONLY do one chain per core.
 
-
-saveJAGS <- function(data, inits, params, modelFile,
-        chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub="save",
+saveJAGS <- function(data, inits, params, modelFile, fileStub,
+        chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1,
         modules = "glm", firstChainID="AA")  {
 
   starttime  <- Sys.time()
@@ -33,8 +32,8 @@ saveJAGS <- function(data, inits, params, modelFile,
   fstChain <- which(DLETTERS == firstChainID)
   lstChain <- fstChain + chains - 1
   if(lstChain > 26^2)
-    stop("Chain IDs go beyond 'ZZ'.", call.=FALSE)  ###########
-  chainIDs <- DLETTERS[fstChain:lstChain]           ############ new
+    stop("Chain IDs go beyond 'ZZ'.", call.=FALSE)
+  chainIDs <- DLETTERS[fstChain:lstChain]
 
   # Check that path exists and files do not exist
   files <- getSaves(fileStub)
@@ -57,14 +56,16 @@ saveJAGS <- function(data, inits, params, modelFile,
   seeds <- parallel.seeds("lecuyer::RngStream", chains)
 
   # Fix inits
+  if(missing(inits) || is.null(inits))
+    inits <- vector('list', chains)
   if(is.function(inits))  {
-    initList <- lapply(1:chains, function(x) inits())
+    initList <- lapply(1:chains, function(x) inits(x))
   } else if (is.list(inits) && length(inits) == chains) {
     initList <- inits
   } else stop("inits must be EITHER a function OR a list of length = chains")
   for(i in 1:chains) {
     initList[[i]] <- c(initList[[i]], seeds[[i]])
-    initList[[i]]$chainID <- chainIDs[i]  # changed
+    initList[[i]]$chainID <- chainIDs[i]
   }
   names(initList) <- chainIDs
 

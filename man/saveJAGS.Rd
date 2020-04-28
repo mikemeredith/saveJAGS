@@ -2,7 +2,7 @@
 \alias{saveJAGS}
 
 \title{
-Write MCMC samples to file
+Write MCMC draws to file
 }
 \description{
 Takes a list of data, initial values, a list of parameters to monitor, and the name of a text file containing the model, calls JAGS via \code{rjags}, and writes the output to a series of files.
@@ -10,8 +10,8 @@ Takes a list of data, initial values, a list of parameters to monitor, and the n
 Note: Currently, this only works with parallel processing with one chain per core.
 }
 \usage{
-saveJAGS(data, inits, params, modelFile,
-        chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1, fileStub,
+saveJAGS(data, inits, params, modelFile, fileStub,
+        chains=3, sample2save=1000, nSaves=3, burnin=1000, thin=1,
         modules = "glm", firstChainID="AA")
 }
 \arguments{
@@ -28,16 +28,16 @@ a character vector giving the names of variables to be monitored.
 the name of the file containing a description of the model.
 }
   \item{chains}{
-the number of chains to run; must not exceed the number of cores/threads available on the machine (maximum 26).
+the number of chains to run; must not exceed the number of cores/threads available on the machine.
 }
   \item{sample2save}{
-the number of MCMC samples to include in each file AFTER thinning.
+the number of MCMC draws to include in each file AFTER thinning.
 }
   \item{nSaves}{
-the number of files to write per chain; the total iterations saved = sample2save * thin * nSaves * chains.
+the number of files to write per chain; the total iterations generated per chain = sample2save * thin * nSaves.
 }
   \item{burnin}{
-the number of iterations to discard at the beginning of each chain; unlike other wrappers, adaptation continues until the end of the burn-in sequence.
+the number of iterations to discard at the beginning of each chain; unlike other wrappers, adaptation continues until the end of the burn-in sequence, there is no separate adaptation phase.
 }
   \item{thin}{
 the thinning interval.
@@ -107,11 +107,17 @@ res2 <- recoverSaves("mysaves/testing")
 all.equal(res1, res2)
 
 # Load the results into R as an mcmc.list object
-mcmc <- combineSaves(res1)
+mcmc <- as.mcmc.list(res1)
 str(mcmc)
 #... or subset by parameters (omit z), or thin:
-mcmc2 <- combineSaves(res1, params=c("p", "psi"), thin=4)
+mcmc2 <- as.mcmc.list(res1, params=c("p", "psi"), thin=4)
 str(mcmc2)
+
+# Load the same subset into R as an mcmcOutput object
+( mco <- mcmcOutput(res1, params=c("p", "psi"), thin=4) )
+summary(mco)
+# Extract individual parameters
+str(mco$psi)
 
 # Clean up
 unlink("JAGSmodel.txt")
