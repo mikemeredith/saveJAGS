@@ -55,20 +55,13 @@ summary.saveJAGSfileList <- function(object, ...) {
     cat(sprintf("Draws saved: %1.1e per file, %1.1e per chain, %1.1e total.\n",
       niter, niter*filesPerChain, nRows))
   }
-  parAll <- colnames(loadEnv$out[[1]])
-  base <- sapply(strsplit(parAll, "\\["), "[", 1)
+  nodes <- colnames(loadEnv$out[[1]])
+  base <- sapply(strsplit(nodes, "\\["), "[", 1)
   nNodes <- length(base)
   tb <- data.frame(nodes=c(table(base)))
-  cat("Parameters included (with number of nodes):\n")
-  # cat("    ", paste0(names(tb), " (", tb, ")", collapse=", "), "\n")
-  print(tb)
-  cat("\nTotal nodes monitored:", nNodes, "\n")
-  if(niter < 1e4) {
-    cat(sprintf("Total values saved: %i\n", nNodes*nRows))
-  } else {
-    cat(sprintf("Total values saved: %1.1e\n", nNodes*nRows))
-  }
-  cat("Expected object size:", round(nNodes*nRows*.Machine$sizeof.longdouble/1e6, 2), "Mb\n")
-  invisible(tb)
+  cat("Total values saved:", humNum(nNodes*nRows))
+  cat("; expected object size:", humBytes(nNodes*nRows*.Machine$sizeof.longdouble/1e6), "\n")
+  cat(nrow(tb), "parameters with",  nNodes, "nodes monitored.", "\n")
+  return(tb)
 }
 
