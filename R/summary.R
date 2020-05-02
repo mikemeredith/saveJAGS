@@ -1,6 +1,9 @@
 
 # Provides a summary of fileList object
 
+# nNodes*nRows uses integer multiplication as both are integers, which results in integer
+#  overflow for big numbers. Need to convert one to float with as.numeric.
+
 summary.saveJAGSfileList <- function(object, ...) {
   # Check that files exist:
   bad <- !file.exists(unlist(object))
@@ -57,7 +60,7 @@ summary.saveJAGSfileList <- function(object, ...) {
   }
   nodes <- colnames(loadEnv$out[[1]])
   base <- sapply(strsplit(nodes, "\\["), "[", 1)
-  nNodes <- length(base)
+  nNodes <- as.numeric(length(base))  # convert to floating point
   tb <- data.frame(nodes=c(table(base)))
   cat("Total values saved:", humNum(nNodes*nRows))
   cat("; expected object size:", humBytes(nNodes*nRows*.Machine$sizeof.longdouble/1e6), "\n")
