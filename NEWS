@@ -4,6 +4,10 @@ TODO
   maybe allow resumeJAGS to start even if the set is ragged.
 
 
+CHANGES in 0.0.3.9020 (2020-05-02)
+
+  * Fixed bug in 'summary' showing KB instead of GB.
+
 CHANGES in 0.0.3.9019 (2020-05-02)
 
   * Fixed bug in 'summary' due to integer overflow.

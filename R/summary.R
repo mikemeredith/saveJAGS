@@ -63,7 +63,7 @@ summary.saveJAGSfileList <- function(object, ...) {
   nNodes <- as.numeric(length(base))  # convert to floating point
   tb <- data.frame(nodes=c(table(base)))
   cat("Total values saved:", humNum(nNodes*nRows))
-  cat("; expected object size:", humBytes(nNodes*nRows*.Machine$sizeof.longdouble/1e6), "\n")
+  cat("; expected object size:", humBytes(nNodes*nRows*.Machine$sizeof.longdouble), "\n")
   cat(nrow(tb), "parameters with",  nNodes, "nodes monitored.", "\n")
   return(tb)
 }
