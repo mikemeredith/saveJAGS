@@ -48,7 +48,7 @@ summary.saveJAGSfileList <- function(object, ...) {
     }
   }
   nthin <- thin(loadEnv$out)
-  cat("\nChains already thinned by:", nthin, "\n")
+  cat("Chains already thinned by:", nthin, "\n")
   niter <- nrow(loadEnv$out[[1]])
   nRows <- niter*filesPerChain*nchains # rows in final matrix/mcmc.list/sims.list
   if(niter < 1e4) {

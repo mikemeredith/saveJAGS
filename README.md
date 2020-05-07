@@ -10,5 +10,12 @@ This has the following advantages:
 
 * Reduce memory needed in R (and never again get a "cannot allocate..." error after a long JAGS run): save as many iterations and parameters as you like to disk, then load only a subset of parameters or thin the chains before loading into R.
 
-For more information see [here](http://mikemeredith.net/blog/2018/Intro_saveJAGS.htm).
+* If some chains exit with errors (usually due to incompatible starting values), you can still recover the results for those that ran properly.
+
+For more information see [here](https://mmeredith.net/blog/2018/Intro_saveJAGS.htm).
+
+## `mcmcOutput` package
+
+A new - and still being developed - package, `mcmcOutput`, provides a class for storing MCMC output and a range of methods and functions to manipulate, summarise and display output. More information is [here](https://mmeredith.net/blog/2020/storing_MCMC.htm). You need to install `mcmcOutput` from GitHub before installing `saveJAGS`.
+
 
