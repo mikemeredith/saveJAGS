@@ -36,6 +36,9 @@ saveJAGS <- function(data, inits, params, modelFile, fileStub,
   chainIDs <- DLETTERS[fstChain:lstChain]
 
   # Check that path exists and files do not exist
+  # check fileStub for final "/"
+  if(grepl("/$", fileStub))
+    stop("File stub must include a file name, ie, must not end with '/'.", call.=FALSE)
   files <- getSaves(fileStub)
   if(!is.null(files)) {
     clash <- chainIDs %in% names(files)

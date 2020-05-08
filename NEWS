@@ -4,6 +4,10 @@ TODO
   maybe allow resumeJAGS to start even if the set is ragged.
 
 
+CHANGES in 0.0.3.9021 (2020-05-08)
+
+  * 'recoverSaves' can now cope with '_' in file name in 'fileStub'.
+
 CHANGES in 0.0.3.9020 (2020-05-02)
 
   * Fixed bug in 'summary' showing KB instead of GB.
