@@ -62,7 +62,11 @@ saveJAGS <- function(data, inits, params, modelFile, fileStub,
   if(missing(inits) || is.null(inits))
     inits <- vector('list', chains)
   if(is.function(inits))  {
-    initList <- lapply(1:chains, function(x) inits(x))
+    if(is.null(formals(inits)$chain)) {  # does inits have a 'chain' argument?
+      initList <- lapply(1:chains, function(x) inits())
+    } else {
+      initList <- lapply(1:chains, function(x) inits(chain=x))
+    }
   } else if (is.list(inits) && length(inits) == chains) {
     initList <- inits
   } else stop("inits must be EITHER a function OR a list of length = chains")

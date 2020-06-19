@@ -1,8 +1,8 @@
 Package: saveJAGS
 Type: Package
 Title: Run JAGS and Regularly Save Output to Files
-Version: 0.0.4
-Date: 2020-05-10
+Version: 0.0.4.9001
+Date: 2020-06-19
 Depends: rjags, coda, mcmcOutput
 Author: Mike Meredith
 Maintainer: Mike Meredith <mike@mmeredith.net>

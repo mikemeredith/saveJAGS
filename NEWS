@@ -1,44 +1,48 @@
 
+CHANGES in 0.0.4.9001 (2020-06-19)
+
+  * Fixed bug in `saveJAGS` when handling `inits` functions with no `chain` argument.
+
 CHANGES in 0.0.4 (2020-05-10)
 
-  * 'recoverSaves' can now cope with '_' in 'fileStub'.
+  * `recoverSaves` can now cope with '_' in `fileStub`.
 
-  * Fixed bugs in 'summary' due to integer overflow and showing KB instead of GB.
+  * Fixed bugs in `summary` due to integer overflow and showing KB instead of GB.
 
-  * Improvements to outputs of 'summary'.
+  * Improvements to outputs of `summary`.
 
-  * Added method to convert file list to 'mcmcOutput' class; package now depends on 'mcmcOutput' package.
+  * Added method to convert file list to `mcmcOutput` class; package now depends on `mcmcOutput` package.
 
-  * Replaced 'combineSaves' with a method for 'as.mcmc.list'
+  * Replaced `combineSaves` with a method for `as.mcmc.list`
 
-  * 'saveJAGS' now works with missing or NULL inits.
+  * `saveJAGS` now works with missing or NULL inits.
 
   * Chain identifiers changed to 2-letter combinations, AA to ZZ; limit of 26 chains raised to 26^2 = 676 (wish of Wyatt Petersen).
 
   * Improved reporting of JAGS errors.
   _not fully tested_, need JAGS to throw errors for that.
 
-  * Default for 'fileStub' removed, user must specify path.
+  * Default for `fileStub` removed, user must specify path.
 
-  * 'summary.saveJAGSfileList' reports if adaptation was adequate and shows median time taken to create a file.
+  * `summary.saveJAGSfileList` reports if adaptation was adequate and shows median time taken to create a file.
 
-  * added functions 'getModel' and 'getData' to get information on the run.
+  * added functions `getModel` and `getData` to get information on the run.
 
-  * 'combineSaves' gains a 'cores' argument and allows parallel processing.
+  * `combineSaves` gains a `cores` argument and allows parallel processing.
 
-  * fixed bug in 'combineSaves' when used after 'resumeJAGS'
+  * fixed bug in `combineSaves` when used after `resumeJAGS`.
 
-  * 'summary.saveJAGSfileList' now returns a vector with the base names.
+  * `summary.saveJAGSfileList` now returns a vector with the parameter names.
 
-  * added 'resumeJAGS' function.
+  * added `resumeJAGS` function.
 
   * file IDs now use 3 digits with leading zeros
 
-  * 'recoverSaves' checks for duplicate A_1 or A_001 files and ensures chains are same length
+  * `recoverSaves` checks for duplicate A_1 or A_001 files and ensures chains are same length
 
   * file lists produced by `saveJAGS` and `recoverSaves` have class `saveJAGSfileList`; there is a `summary` method for this.
 
-  * `saveJAGS` uses the Lecuyer random number generator.
+  * `saveJAGS` uses the L'Ecuyer random number generator.
 
   * `combineSaves` gains `params` and `thin` arguments
 
