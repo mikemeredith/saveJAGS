@@ -70,15 +70,37 @@ resumeJAGS <- function(fileStub, nSaves=3) {
 resumeJAGS1 <- function(resList, params, sample2save, nSaves, startAt=1,
   thin=1, fileStub="save") {
 
+  JAGSerrorMessage <- NULL
+
   jm <- resList$jm
-  jm$recompile()
+  chk <- try(jm$recompile(), silent=TRUE)
+  if(inherits(chk, "try-error"))
+    JAGSerrorMessage <- chk
+
   # Adaptation phase
-  for(i in 1:100) {
-    done <- rjags::adapt(jm, 100)
-    if(done)
-      break
+  if(is.null(JAGSerrorMessage))
+    for(i in 1:100) {
+      done <- try(rjags::adapt(jm, 100))
+      if(inherits(done, "try-error")) {
+        JAGSerrorMessage <- done
+        break
+      }
+      if(done)
+        break
+    }
+    
+  if(is.null(JAGSerrorMessage))  {
+    adaptIsAdequate <- try(rjags::adapt(jm, n.iter=0, end.adaptation=TRUE))
+    if(inherits(adaptIsAdequate, "try-error"))
+      JAGSerrorMessage <- adaptIsAdequate
   }
-  adaptIsAdequate <- rjags::adapt(jm, n.iter=0, end.adaptation=TRUE)
+  
+  if(!is.null(JAGSerrorMessage)) {
+    # Save the error message to a file
+    errorfile <- paste(fileStub, resList$chainID, "resumeError.RData", sep="_")
+    save(JAGSerrorMessage, file=errorfile)
+    return(JAGSerrorMessage)
+  }
 
   # Create JAGSsettings object
   JAGSsettings <- list(modules=list.modules(), samplers=list.factories("sampler"))

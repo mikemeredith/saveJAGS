@@ -16,3 +16,6 @@ $RECYCLE.BIN/
 
 # R's own fecal material
 Rplots.pdf
+
+# Set up and test scripts
+.local_checks/

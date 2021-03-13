@@ -1,4 +1,8 @@
 
+CHANGES in 0.0.4.9002 (2021-03-13)
+
+  * Added checks for JAGS errors in `resumeJAGS`.
+
 CHANGES in 0.0.4.9001 (2020-06-19)
 
   * Fixed bug in `saveJAGS` when handling `inits` functions with no `chain` argument.
